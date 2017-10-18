@@ -31,7 +31,7 @@
 					{% endif %}
 					<form action="{% url 'post:comment_create' post_pk=post.pk %}" method="POST" class="comment-form">
 						{% csrf_token %}
-						<input type="text" name="content" placeholder="댓글 달기...">
+						{{ comment_form.content }}
 					</form>
 				</div>
 			</div>
