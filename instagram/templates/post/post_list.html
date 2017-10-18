@@ -2,7 +2,7 @@
 
 {% block title %}Post List{% endblock %}
 {% block content %}
-<div>
+<div class="row">
 	{% for post in posts %}
 		{% include 'include/post.html' with post_type='list' %}
 	{% endfor %}
