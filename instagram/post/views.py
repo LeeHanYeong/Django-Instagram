@@ -15,6 +15,16 @@ def post_list(request):
     return render(request, 'post/post_list.html', context)
 
 
+def post_detail(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    comment_form = CommentForm()
+    context = {
+        'post': post,
+        'comment_form': comment_form,
+    }
+    return render(request, 'post/post_detail.html', context)
+
+
 def comment_create(request, post_pk):
     # 요청 메서드가 POST방식 일 때만 처리
     if request.method == 'POST':
