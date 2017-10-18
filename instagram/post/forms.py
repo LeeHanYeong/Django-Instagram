@@ -1,16 +1,22 @@
 from django import forms
 
+from .models import Comment
 
-class CommentForm(forms.Form):
-    content = forms.CharField(
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'content',
-                'placeholder': '댓글 달기...',
-            }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = (
+            'content',
         )
-    )
+        widgets = {
+            'content': forms.TextInput(
+                attrs={
+                    'class': 'content',
+                    'placeholder': '댓글 달기...',
+                }
+            )
+        }
 
     def clean_content(self):
         data = self.cleaned_data['content']

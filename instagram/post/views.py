@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import CommentForm
-from .models import Post, Comment
+from .models import Post
 
 
 def post_list(request):
@@ -24,13 +24,15 @@ def comment_create(request, post_pk):
         comment_form = CommentForm(request.POST)
         # 올바른 데이터가 Form인스턴스에 바인딩 되어있는지 유효성 검사
         if comment_form.is_valid():
-            # 유효성 검사에 통과하면 Comment객체 생성 및 DB저장
-            Comment.objects.create(
-                post=post,
-                # 작성자는 현재 요청의 사용자로 지정
-                author=request.user,
-                content=comment_form.cleaned_data['content']
-            )
+            # 유효성 검사에 통과하면 ModelForm의 save()호출로 인스턴스 생성
+            # DB에 저장하지 않고 인스턴스만 생성하기 위해 commit=False옵션 지정
+            comment = comment_form.save(commit=False)
+            # CommentForm에 지정되지 않았으나 필수요소인 author와 post속성을 지정
+            comment.post = post
+            comment.author = request.user
+            # DB에 저장
+            comment.save()
+
             # 성공 메시지를 다음 request의 결과로 전달하도록 지정
             messages.success(request, '댓글이 등록되었습니다')
         else:

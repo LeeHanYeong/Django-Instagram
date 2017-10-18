@@ -15,7 +15,7 @@ ul, ol {
     margin-bottom: 15px;
 }
 
-.post-item .comment-form input {
+.post-item .comment-form input.content {
     border: 0;
     width: 100%;
     outline: none;
