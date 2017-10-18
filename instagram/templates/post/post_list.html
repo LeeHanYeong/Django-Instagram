@@ -12,6 +12,18 @@
 </head>
 <body>
 	<div class="container">
+		{% if messages %}
+			{% for message in messages %}
+				<div class="alert-message alert
+					{% if message.tags == 'success' %}
+						alert-success
+					{% elif message.tags == 'error' %}
+						alert-danger
+					{% endif %}
+					">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+
 		<h1>Post List</h1>
 
 		{% for post in posts %}

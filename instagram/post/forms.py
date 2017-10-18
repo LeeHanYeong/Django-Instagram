@@ -3,6 +3,7 @@ from django import forms
 
 class CommentForm(forms.Form):
     content = forms.CharField(
+        required=False,
         widget=forms.TextInput(
             attrs={
                 'class': 'content',
@@ -10,3 +11,14 @@ class CommentForm(forms.Form):
             }
         )
     )
+
+    def clean_content(self):
+        data = self.cleaned_data['content']
+        errors = []
+        if data == '':
+            errors.append(forms.ValidationError('댓글 내용을 입력해주세요'))
+        elif len(data) > 50:
+            errors.append(forms.ValidationError('댓글 내용은 50자 이하로 입력해주세요'))
+        if errors:
+            raise forms.ValidationError(errors)
+        return data

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import CommentForm
@@ -30,6 +31,18 @@ def comment_create(request, post_pk):
                 author=request.user,
                 content=comment_form.cleaned_data['content']
             )
-            # 정상적으로 Comment가 생성된 후
-            # 'post'네임스페이스를 가진 url의 'post_list'이름에 해당하는 뷰로 이동
-            return redirect('post:post_list')
+            # 성공 메시지를 다음 request의 결과로 전달하도록 지정
+            messages.success(request, '댓글이 등록되었습니다')
+        else:
+            # 유효성 검사에 실패한 경우
+            # 에러 목록을 순회하며 에러메시지를 작성, messages의 error레벨로 추가
+            error_msg = '댓글 등록에 실패했습니다\n{}'.format(
+                '\n'.join(
+                    [f'- {error}'
+                     for key, value in comment_form.errors.items()
+                     for error in value]))
+            messages.error(request, error_msg)
+
+        # comment_form이 valid하건 하지않건
+        # 'post'네임스페이스를 가진 url의 'post_list'이름에 해당하는 뷰로 이동
+        return redirect('post:post_list')
