@@ -1,0 +1,8 @@
+.post-item {
+
+}
+.post-item > .post-image {
+    width: 100%;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
