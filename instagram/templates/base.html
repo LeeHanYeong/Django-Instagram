@@ -35,9 +35,10 @@
 					{% if user.is_authenticated %}
 					<li><a href="">Likes</a></li>
 					<li><a href="">Profile</a></li>
+					<li><a href="{% url 'member:logout' %}">Logout</a></li>
 					{% else %}
 					<li><a href="{% url 'member:login' %}">Login</a></li>
-					<li><a href="">Signup</a></li>
+					<li><a href="{% url 'member:signup' %}">Signup</a></li>
 					{% endif %}
 				</ul>
 			</div>
