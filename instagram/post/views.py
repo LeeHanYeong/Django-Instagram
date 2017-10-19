@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 from .models import Post
 
 
@@ -23,6 +23,29 @@ def post_detail(request, post_pk):
         'comment_form': comment_form,
     }
     return render(request, 'post/post_detail.html', context)
+
+
+def post_create(request):
+    if request.method == 'POST':
+        # PostForm은 파일을 처리하므로 request.FILES도 함께 바인딩
+        post_form = PostForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            # author필드를 채우기 위해 인스턴스만 생성
+            post = post_form.save(commit=False)
+            # author필드를 채운 후 DB에 저장
+            post.author = request.user
+            post.save()
+
+            # 성공 알림을 messages에 추가 후 post_list뷰로 이동
+            messages.success(request, '사진이 등록되었습니다')
+            return redirect('post:post_list')
+    else:
+        post_form = PostForm()
+
+    context = {
+        'post_form': post_form,
+    }
+    return render(request, 'post/post_create.html', context)
 
 
 def comment_create(request, post_pk):
