@@ -10,6 +10,9 @@ from .forms import LoginForm, SignupForm
 
 def login(request):
     if request.method == 'POST':
+        # 로그인 성공 후 이동할 URL. 주어지지 않으면 None
+        next = request.GET.get('next')
+
         # Data bounded form인스턴스 생성
         login_form = LoginForm(request.POST)
         # 유효성 검증에 성공할 경우
@@ -29,8 +32,9 @@ def login(request):
             if user:
                 # Django의 auth앱에서 제공하는 login함수를 실행해 앞으로의 요청/응답에 세션을 유지한다
                 django_login(request, user)
-                # Post목록 화면으로 이동
-                return redirect('post:post_list')
+
+                # next가 존재하면 해당 위치로, 없으면 Post목록 화면으로 이동
+                return redirect(next if next else 'post:post_list')
             # 인증에 실패하면 login_form에 non_field_error를 추가한다
             login_form.add_error(None, '아이디 또는 비밀번호가 올바르지 않습니다')
     else:

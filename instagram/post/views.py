@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
+from utils.decorators import login_required
 from .forms import CommentForm, PostForm
 from .models import Post
 
@@ -25,6 +26,7 @@ def post_detail(request, post_pk):
     return render(request, 'post/post_detail.html', context)
 
 
+@login_required
 def post_create(request):
     if request.method == 'POST':
         # PostForm은 파일을 처리하므로 request.FILES도 함께 바인딩
@@ -48,7 +50,11 @@ def post_create(request):
     return render(request, 'post/post_create.html', context)
 
 
+@login_required
 def comment_create(request, post_pk):
+    # GET파라미터로 전달된 작업 완료 후 이동할 URL값
+    next_path = request.GET.get('next')
+
     # 요청 메서드가 POST방식 일 때만 처리
     if request.method == 'POST':
         # Post인스턴스를 가져오거나 404 Response를 돌려줌
@@ -77,7 +83,9 @@ def comment_create(request, post_pk):
                      for key, value in comment_form.errors.items()
                      for error in value]))
             messages.error(request, error_msg)
+        # next parameter에 값이 담겨 온 경우, 해당 경로로 이동
 
-        # comment_form이 valid하건 하지않건
-        # 'post'네임스페이스를 가진 url의 'post_list'이름에 해당하는 뷰로 이동
+        if next_path:
+            return redirect(next_path)
+        # next parameter가 빈 경우 post_list뷰로 이동
         return redirect('post:post_list')

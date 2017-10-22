@@ -9,6 +9,9 @@ class Post(models.Model):
     def __str__(self):
         return f'Post (PK: {self.pk}, Author: {self.author.username})'
 
+    class Meta:
+        ordering = ['-pk']
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments')

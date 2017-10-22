@@ -15,10 +15,14 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# 사용자 정의 유저 모델
 AUTH_USER_MODEL = 'member.User'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+# 로그인이 완료되면 이동할 URL
+LOGIN_REDIRECT_URL = 'post:post_list'
+
+# 로그인이 필요할 경우 이동할 URL
+LOGIN_URL = 'member:login'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '$5uyuez31$(v7p%@z5^(9kzg_ju%)#$21^6kofbj6%1#^_eqyc'

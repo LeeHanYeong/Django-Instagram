@@ -18,7 +18,15 @@
 		</ul>
 		<hr>
 		{% endif %}
-		<form action="{% url 'post:comment_create' post_pk=post.pk %}" method="POST" class="comment-form">
+		<form
+			action="{% url 'post:comment_create' post_pk=post.pk %}?next=
+			{% if post_type == 'list' %}
+				{% url 'post:post_list' %}#post-{{ post.pk }}
+			{% elif post_type == 'detail' %}
+				{% url 'post:post_detail' post_pk=post.pk %}
+			{% endif %}"
+			method="POST"
+			class="comment-form">
 			{% csrf_token %}
 			{{ comment_form.content }}
 		</form>
