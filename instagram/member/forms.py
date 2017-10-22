@@ -30,9 +30,16 @@ class SignupForm(UserCreationForm):
             'username',
             'password1',
             'password2',
+            'img_profile',
+            'gender',
         )
         widgets = {
             'username': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'gender': forms.Select(
                 attrs={
                     'class': 'form-control',
                 }
